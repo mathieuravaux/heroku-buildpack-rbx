@@ -6,11 +6,17 @@ indent() {
 
 echo "-----> Found a rackup file"
 
+echo "Found rubinius: $(which rbx)"
+echo "Found rvm: $(which rvm)"
+
+
 # if gemfile exists, bundle
 if [ -s $1/Gemfile ]; then
-  echo "Installing Bundler" | indent 
-  gem install bundler
   echo "Gemfile found, bundling" | indent
+  if ! which bundle ; then
+    echo "Installing Bundler" | indent | indent
+    gem install bundler
+  fi
   bundle
   exit 1
 fi
