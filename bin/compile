@@ -8,6 +8,8 @@ echo "-----> Found a rackup file"
 
 # if gemfile exists, bundle
 if [ -s $1/Gemfile ]; then
+  echo "Installing Bundler" | indent 
+  gem install bundler
   echo "Gemfile found, bundling" | indent
   bundle
   exit 1
