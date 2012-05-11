@@ -4,20 +4,51 @@ indent() {
   sed -u 's/^/       /'
 }
 
-echo "-----> Found a rackup file"
+ensure_env() {
+  echo "Ensuring suitable environment"
+  mkdir -p $CACHE
+  mkdir -p $BUILD
+  export $PATH="$CACHE:$PATH"
+}
 
-echo "Found rubinius: $(which rbx)"
-echo "Found rvm: $(which rvm)"
+
+install_rbx() {
+  echo "Installing rbx-head, with 1.9 support" 
+  local old_path=$PWD
+
+    git clone git://github.com/rubinius/rubinius.git /tmp/rubinius
+    cd /tmp/rubinius
+    ./configure --prefix $CACHE/rbx
+    rake install 
+
+  cd $old_path
+}
+
+bootstrap() {
 
 
-# if gemfile exists, bundle
-if [ -s $1/Gemfile ]; then
-  echo "Gemfile found, bundling" | indent
-  if ! which bundle ; then
-    echo "Installing Bundler" | indent | indent
-    gem install bundler
+  install_rbx
+
+
+  echo "Bootstrapping Path"
+
+  echo "Installing bundler"
+
+  echo "Installing foreman"
+}
+
+install_gems() {
+  # if gemfile exists, bundle
+  if [ -s $1/Gemfile ]; then
+    echo "Gemfile found, bundling" | indent
+    foreman run bundle
   fi
-  bundle
-  exit 1
-fi
+}
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+
+bootstrap
+install_gems
+foreman start
 
