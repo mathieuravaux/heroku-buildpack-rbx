@@ -28,12 +28,17 @@ install_rbx() {
   fi 
 }
 
-bootstrap() {
-  install_rbx
-
+install_gems() {
   echo "Installing bundler"
+  rbx -S gem install bundler
 
   echo "Installing foreman"
+  return 2
+}
+
+bootstrap() {
+  install_rbx
+  install_gems
 }
 
 install_gems() {
@@ -49,6 +54,7 @@ CACHE_DIR=$2
 
 bootstrap
 install_gems
+exit 1
 foreman start
 
 
