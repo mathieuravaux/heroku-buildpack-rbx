@@ -13,24 +13,23 @@ ensure_env() {
 
 
 install_rbx() {
-  echo "Installing rbx-head, with 1.9 support" 
-  local old_path=$PWD
+  if which rbx &>/dev/null ; then
+    echo "rbx detected"
+  else 
+    echo "Installing rbx-head, with 1.9 support" 
+    local old_path=$PWD
 
     git clone git://github.com/rubinius/rubinius.git /tmp/rubinius
     cd /tmp/rubinius
     ./configure --prefix $CACHE/rbx
     rake install 
 
-  cd $old_path
+    cd $old_path
+  fi 
 }
 
 bootstrap() {
-
-
   install_rbx
-
-
-  echo "Bootstrapping Path"
 
   echo "Installing bundler"
 
@@ -51,4 +50,5 @@ CACHE_DIR=$2
 bootstrap
 install_gems
 foreman start
+
 
