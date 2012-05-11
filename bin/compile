@@ -14,10 +14,10 @@ ensure_env() {
 
 install_rbx() {
   if which rbx &>/dev/null ; then
-    echo "rbx detected"
+    echo "rbx detected" | indent
     return 0
   else 
-    echo "Installing rbx-head, with 1.9 support" 
+    echo "Installing rbx-head, with 1.9 support" | indent
     local old_path=$PWD
 
     git clone git://github.com/rubinius/rubinius.git /tmp/rubinius
