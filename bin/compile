@@ -31,7 +31,8 @@ install_rbx() {
       
       echo "Unpacking" | indent
         cd /tmp/rbx/rubinius
-        tar -zxvf rubinius.tar.gz -O > 
+        tar -zxvf rubinius.tar.gz 
+        cd /tmp/rbx/rubinius/rubinius-rubinius-$RBX_VERSION
 
       echo "Compiling" | indent
         ./configure --prefix $CACHE/rbx --default-version=1.9
