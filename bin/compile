@@ -4,6 +4,9 @@ indent() {
   sed -u 's/^/       /'
 }
 
+download() {
+  curl -L -s -S $@
+}
 
 ensure_env() {
   echo "Ensuring suitable environment"
@@ -26,7 +29,7 @@ install_rbx() {
       mkdir -p /tmp/rbx
 
       echo "Downloading Rubinius" | indent
-        curl -L $RBX_URL/release-$RBX_VERSION | tar -zx$VERBOSE
+        download $RBX_URL/release-$RBX_VERSION | tar -zx$VERBOSE
         mv rubinius-rubinius-$RBX_VERSION /tmp/rbx/rubinius
       
       echo "Unpacking" | indent
@@ -65,6 +68,8 @@ install_gems() {
     foreman run bundle
   fi
 }
+
+
 
 VERBOSE=
 RBX_URL=https://github.com/rubinius/rubinius/tarball
