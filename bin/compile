@@ -22,8 +22,6 @@ install_rbx() {
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
       echo "-----> rbx install detected, checking version..." 
 
-
-      touch "$CACHE/rbx_version"
       if [ "$(cat $CACHE/rbx_version)" != $RBX_VERSION ] ; then 
         echo "old version detected, re-building" | indent
         install_rbx -f
@@ -52,7 +50,7 @@ install_rbx() {
   return 0
 }
 
-install_gems() {
+install_base_gems() {
   echo "Installing bundler"
   rbx -S gem install bundler
 
@@ -61,9 +59,17 @@ install_gems() {
   return 2
 }
 
+init_environment() {
+  mkdir -p $BUILD 
+  mkdir -p $CACHE
+  touch $CACHE/rbx_version
+}
+
+
 bootstrap() {
+  init_environment
   install_rbx
-  install_gems
+  install_base_gems
 }
 
 install_gems() {
