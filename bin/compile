@@ -22,6 +22,8 @@ install_rbx() {
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
       echo "------> rbx install detected, checking version..." 
 
+
+      touch "$CACHE/rbx_version"
       if [ `cat $CACHE/rbx_version` != $RBX_VERSION ] ; then 
         echo "old version detected, re-building" | indent
         install_rbx -f
