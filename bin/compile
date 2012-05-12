@@ -84,6 +84,9 @@ install_gems() {
 }
 
 
+set -e
+
+#set -x
 
 VERBOSE=
 RBX_URL=https://github.com/rubinius/rubinius/tarball
