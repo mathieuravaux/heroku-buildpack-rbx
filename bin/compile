@@ -65,7 +65,7 @@ init_environment() {
   mkdir -p $CACHE
 
   mkdir -p $CACHE/gems/{bin,install}
-  gem install -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake
+  gem install -q -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake 
 
   touch $CACHE/rbx_version
 }
