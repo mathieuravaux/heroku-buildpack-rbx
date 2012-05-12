@@ -17,9 +17,9 @@ install_rbx() {
   local old_path=$PWD
 
     #if ! which rbx &>/dev/null ; then
-      echo "rbx install detected" | indent
+      #echo "rbx install detected" | indent
         
-      return 0
+      #return 0
     #else 
       echo "------> Installing rbx-head, with 1.9 support" | indent
 
