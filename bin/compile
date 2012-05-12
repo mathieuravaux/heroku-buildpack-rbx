@@ -63,6 +63,8 @@ init_environment() {
   mkdir -p $BUILD 
   mkdir -p $CACHE
   touch $CACHE/rbx_version
+
+  gem install rake
 }
 
 
