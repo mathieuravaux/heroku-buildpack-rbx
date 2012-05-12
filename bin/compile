@@ -79,8 +79,8 @@ install_gems() {
 VERBOSE=
 RBX_URL=https://github.com/rubinius/rubinius/tarball
 RBX_VERSION="1.2.4"
-BUILD_DIR=$1
-CACHE_DIR=$2
+BUILD=$1
+CACHE=$2
 
 bootstrap
 install_gems
