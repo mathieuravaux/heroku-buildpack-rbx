@@ -4,6 +4,7 @@ indent() {
   sed -u 's/^/       /'
 }
 
+
 ensure_env() {
   echo "Ensuring suitable environment"
   mkdir -p $CACHE
@@ -13,21 +14,33 @@ ensure_env() {
 
 
 install_rbx() {
-  if which rbx &>/dev/null ; then
-    echo "rbx detected" | indent
-    return 0
-  else 
-    echo "Installing rbx-head, with 1.9 support" | indent
-    local old_path=$PWD
+  local old_path=$PWD
 
-    git clone git://github.com/rubinius/rubinius.git /tmp/rubinius
-    cd /tmp/rubinius
-    ./configure --prefix $CACHE/rbx
-    rake install 
+    if which rbx &>/dev/null ; then
+      echo "rbx install detected" | indent
+        
+      return 0
+    else 
+      echo "------> Installing rbx-head, with 1.9 support" | indent
 
-    cd $old_path
-    return 0
-  fi 
+      mkdir -p /tmp/rbx
+
+      echo "Downloading Rubinius" | indent
+        wget https://github.com/rubinius/rubinius/tarball/release-$RBX_VERSION
+        mv release-$RBX_VERSION /tmp/rbx
+      
+      echo "Unpacking" | indent
+        cd /tmp/rbx/rubinius
+        tar -zxvf rubinius.tar.gz -O > 
+
+      echo "Compiling" | indent
+        ./configure --prefix $CACHE/rbx --default-version=1.9
+        rake install 
+
+      return 0
+    fi 
+    
+  cd $old_path
 }
 
 install_gems() {
@@ -35,6 +48,7 @@ install_gems() {
   rbx -S gem install bundler
 
   echo "Installing foreman"
+  rbx -S gem install foreman
   return 2
 }
 
@@ -51,6 +65,8 @@ install_gems() {
   fi
 }
 
+
+RBX_VERSION="1.2.4"
 BUILD_DIR=$1
 CACHE_DIR=$2
 

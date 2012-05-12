@@ -1,4 +1,1 @@
 #!/bin/sh
-      echo "Installing Bundler" | indent | indent
-      gem install bundler
-
