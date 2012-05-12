@@ -26,8 +26,8 @@ install_rbx() {
       mkdir -p /tmp/rbx
 
       echo "Downloading Rubinius" | indent
-        curl -L https://github.com/rubinius/rubinius/tarball/release-$RBX_VERSION
-        mv release-$RBX_VERSION /tmp/rbx
+        curl -L $RBX_URL/release-$RBX_VERSION | tar -zxv
+        mv rubinius-rubinius-release-$RBX_VERSION /tmp/rbx/rubinius
       
       echo "Unpacking" | indent
         cd /tmp/rbx/rubinius
@@ -66,7 +66,7 @@ install_gems() {
   fi
 }
 
-
+RBX_URL=https://github.com/rubinius/rubinius/tarball
 RBX_VERSION="1.2.4"
 BUILD_DIR=$1
 CACHE_DIR=$2
