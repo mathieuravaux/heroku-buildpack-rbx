@@ -16,7 +16,7 @@ ensure_env() {
 install_rbx() {
   local old_path=$PWD
 
-    if which rbx &>/dev/null ; then
+    if ! which rbx &>/dev/null ; then
       echo "rbx install detected" | indent
         
       return 0
