@@ -20,11 +20,11 @@ install_rbx() {
   local old_path=$PWD
 
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
-      echo "------> rbx install detected, checking version..." 
+      echo "-----> rbx install detected, checking version..." 
 
 
-      echo >> "$CACHE/rbx_version"
-      if [ `cat $CACHE/rbx_version` != $RBX_VERSION ] ; then 
+      touch "$CACHE/rbx_version"
+      if [ "$(cat $CACHE/rbx_version)" != $RBX_VERSION ] ; then 
         echo "old version detected, re-building" | indent
         install_rbx -f
       else 
@@ -32,7 +32,7 @@ install_rbx() {
       fi
 
     else 
-      echo "------> Installing rbx-head, with 1.9 support"
+      echo "-----> Installing rbx-head, with 1.9 support"
 
       mkdir -p /tmp/rbx
 
