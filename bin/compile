@@ -19,32 +19,35 @@ ensure_env() {
 install_rbx() {
   local old_path=$PWD
 
-    #if ! which rbx &>/dev/null ; then
-      #echo "rbx install detected" | indent
-        
-      #return 0
-    #else 
-      echo "------> Installing rbx-head, with 1.9 support" | indent
+    if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
+      echo "------> rbx install detected, checking version..." 
+
+      if [ `cat $CACHE/rbx_version` != $RBX_VERSION ] ; then 
+        echo "old version detected, re-building" | indent
+        install_rbx -f
+      else 
+        echo "version is up to date" | indent 
+      fi
+
+    else 
+      echo "------> Installing rbx-head, with 1.9 support"
 
       mkdir -p /tmp/rbx
 
       echo "Downloading Rubinius" | indent
         download $RBX_URL/release-$RBX_VERSION | tar -zx$VERBOSE
-        mv rubinius-rubinius-$RBX_VERSION /tmp/rbx/rubinius
-      
-      echo "Unpacking" | indent
-        cd /tmp/rbx/rubinius
-        tar -zxvf rubinius.tar.gz 
-        cd /tmp/rbx/rubinius/rubinius-rubinius-$RBX_VERSION
+        mv rubinius-rubinius-* /tmp/rbx/rubinius
 
       echo "Compiling" | indent
         ./configure --prefix $CACHE/rbx --default-version=1.9
         rake install 
-
-      return 0
-    #fi 
+        echo $RBX_VERSION > $CACHE/rbx_version
+      
+    fi 
     
   cd $old_path
+
+  return 0
 }
 
 install_gems() {
