@@ -63,9 +63,11 @@ init_environment() {
   echo "-----> Initializing Basic Environment" 
   mkdir -p $BUILD 
   mkdir -p $CACHE
-  touch $CACHE/rbx_version
 
-  bundle exec gem install rake
+  mkdir -p $CACHE/gems/{bin,install}
+  gem install -l -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake
+
+  touch $CACHE/rbx_version
 }
 
 
