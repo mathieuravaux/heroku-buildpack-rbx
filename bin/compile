@@ -34,7 +34,7 @@ install_rbx() {
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
       main_task "rbx install detected, checking version..." 
 
-        if [ "$(cat $CACHE/rbx_version)" != $RBX_VERSION ] ; then 
+        if [ "$(cat $CACHE/rbx_version)" != "$RBX_VERSION+$BUILDPACK_VERSION" ] ; then 
           sub_task "old version detected, re-building"
           clear_cache
           install_rbx -f
@@ -58,7 +58,7 @@ install_rbx() {
           rake install 
 
         sub_task "Running Post-install Tasks"
-          echo $RBX_VERSION > $CACHE/rbx_version
+          echo "$RBX_VERSION+$BUILDPACK_VERSION" > $CACHE/rbx_version
     fi 
     
   cd $old_path
@@ -107,8 +107,9 @@ set -e
 #set -x
 
 VERBOSE=
-RBX_URL=https://github.com/rubinius/rubinius/tarball
-RBX_VERSION="1.2.4"
+RBX_URL=https://github.com/rubinius/rubinius/master
+RBX_VERSION="master"
+BUILDPACK_VERSION="0.0.1"
 BUILD=$1
 CACHE=$2
 
