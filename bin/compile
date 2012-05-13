@@ -52,6 +52,7 @@ install_rbx() {
 
         sub_task "Compiling" 
           cd /tmp/rbx/rubinius
+          ls
           ./configure --prefix $CACHE/rbx --default-version 1.9
           rake install 
 
