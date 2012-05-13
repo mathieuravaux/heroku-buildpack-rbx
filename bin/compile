@@ -47,7 +47,7 @@ install_rbx() {
         mkdir -p /tmp/rbx
 
         sub_task "Downloading" 
-          download $RBX_URL/release-$RBX_VERSION | tar -zx$VERBOSE
+          download $RBX_URL/$RBX_VERSION | tar -zx$VERBOSE
           mv rubinius-rubinius-* /tmp/rbx/rubinius
 
         sub_task "Compiling" 
