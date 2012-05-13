@@ -25,10 +25,6 @@ ensure_env() {
   export $PATH="$CACHE:$PATH"
 }
 
-clear_cache() {
-  rm -rf $CACHE/*
-}
-
 check_version() {
   [ "$CURRENT_VERSION" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
 }
@@ -42,7 +38,6 @@ install_rbx() {
         
         if check_version ; then
           sub_task "Old version detected, re-building"
-            clear_cache
             install_rbx -f
         else 
           sub_task "Version is up to date" 
@@ -88,9 +83,7 @@ init_environment() {
     mkdir -p $CACHE/gems/{bin,install}
     gem install -q -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake &>/dev/null
 
-    touch $CACHE/rbx_version
-
-    export PATH="$CACHE$PATH"
+    export PATH="$CACHE/rubinius$PATH"
 }
 
 
