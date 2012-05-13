@@ -39,18 +39,20 @@ install_rbx() {
         fi
 
     else 
-      main_task "Installing rbx-head, with 1.9 support"
+      main_task "Installing Rubinius"
         mkdir -p /tmp/rbx
 
-        sub_task "Downloading Rubinius" 
+        sub_task "Downloading" 
           download $RBX_URL/release-$RBX_VERSION | tar -zx$VERBOSE
           mv rubinius-rubinius-* /tmp/rbx/rubinius
 
         sub_task "Compiling" 
+          cd /tmp/rbx/rubinius
           ./configure --prefix $CACHE/rbx --default-version=1.9
           rake install 
+
+        sub_task "Running Post-install Tasks"
           echo $RBX_VERSION > $CACHE/rbx_version
-      
     fi 
     
   cd $old_path
