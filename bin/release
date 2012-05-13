@@ -1,1 +1,8 @@
 #!/bin/sh
+cat <<YAML
+---
+addons:
+default_process_types:
+config_vars:
+  CURRENT_VERSION:master+0.0.1
+YAML

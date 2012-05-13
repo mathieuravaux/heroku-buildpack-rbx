@@ -30,20 +30,11 @@ clear_cache() {
 }
 
 check_version() {
-  cat $CACHE/rbx_version
-  [ "$(cat $CACHE/rbx_version)" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
+  [ "$CURRENT_VERSION" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
 }
 
-write_version() {
-  echo "$RBX_VERSION+$BUILDPACK_VERSION" 
-  echo "$RBX_VERSION+$BUILDPACK_VERSION" > $CACHE/rbx_version
-}
 
 install_rbx() {
-  echo "foo" > $CACHE/rbx_version
-  cat $CACHE/rbx_version
-  return 1
-
   local old_path=$PWD
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
       main_task "Rubinius install detected, checking version..." 
@@ -67,12 +58,7 @@ install_rbx() {
 
         sub_task "Compiling" 
           cd /tmp/rbx/rubinius
-          
           rbx_compile
-          
-
-        sub_task "Running Post-install Tasks"
-          write_version
     fi 
     
   cd $old_path
