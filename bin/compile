@@ -97,6 +97,7 @@ init_environment() {
 bootstrap() {
   echo $PATH
   init_environment
+  echo $PATH
   install_rbx
   install_base_gems
 }
@@ -112,7 +113,7 @@ install_gems() {
 
 set -e
 
-set -x
+#set -x
 
 VERBOSE=
 RBX_URL=https://github.com/rubinius/rubinius/tarball
