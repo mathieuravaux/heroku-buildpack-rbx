@@ -58,7 +58,7 @@ install_rbx() {
 
         sub_task "Compiling" 
           cd /tmp/rbx/rubinius
-          rbx_compile
+          #rbx_compile
     fi 
     
   cd $old_path
@@ -71,17 +71,17 @@ rbx_compile() {
   rake install 
 } &>/dev/null
 
-  install_base_gems() {
-    main_task "Installing Necessary Gems"
+install_base_gems() {
+  main_task "Installing Necessary Gems"
     sub_task "Installing bundler"
-    rbx -S gem install bundler
+      rbx -S gem install bundler
 
     sub_task "Installing foreman"
-    rbx -S gem install foreman
-  }
+      rbx -S gem install foreman
+}
 
-  init_environment() {
-    main_task "Initializing Basic Environment" 
+init_environment() {
+  main_task "Initializing Basic Environment" 
     mkdir -p $BUILD 
     mkdir -p $CACHE
 
@@ -91,40 +91,41 @@ rbx_compile() {
     touch $CACHE/rbx_version
 
     export PATH="$CACHE:$PATH"
-  }
+}
 
 
-  bootstrap() {
-    init_environment
-    install_rbx
-    install_base_gems
-  }
+bootstrap() {
+  echo $PATH
+  init_environment
+  install_rbx
+  install_base_gems
+}
 
-  install_gems() {
-    # if gemfile exists, bundle
-    if [ -s $1/Gemfile ]; then
-      echo "Gemfile found, bundling" | indent
-      foreman run bundle
-    fi
-  }
-
-
-  set -e
-
-  set -x
-
-  VERBOSE=
-  RBX_URL=https://github.com/rubinius/rubinius/tarball
-  RBX_VERSION="master"
-  BUILDPACK_VERSION="0.0.1"
-  BUILD=$1
-  CACHE=$2
+install_gems() {
+  # if gemfile exists, bundle
+  if [ -s $1/Gemfile ]; then
+    echo "Gemfile found, bundling" | indent
+    foreman run bundle
+  fi
+}
 
 
+set -e
 
-  bootstrap
-  install_gems
-  exit 1
-  foreman start
+set -x
+
+VERBOSE=
+RBX_URL=https://github.com/rubinius/rubinius/tarball
+RBX_VERSION="master"
+BUILDPACK_VERSION="0.0.1"
+BUILD=$1
+CACHE=$2
+
+
+
+bootstrap
+install_gems
+exit 1
+foreman start
 
 
