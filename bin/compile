@@ -8,6 +8,15 @@ download() {
   curl -L -s -S $@
 }
 
+main_task() {
+  echo -n "-----> "
+  echo $@
+}
+
+sub_task() {
+  echo $@
+} | indent
+
 ensure_env() {
   echo "Ensuring suitable environment"
   mkdir -p $CACHE
@@ -18,30 +27,28 @@ ensure_env() {
 
 install_rbx() {
   local old_path=$PWD
-
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
-      echo "-----> rbx install detected, checking version..." 
+      main_task "rbx install detected, checking version..." 
 
-      if [ "$(cat $CACHE/rbx_version)" != $RBX_VERSION ] ; then 
-        echo "old version detected, re-building" | indent
-        install_rbx -f
-      else 
-        echo "version is up to date" | indent 
-      fi
+        if [ "$(cat $CACHE/rbx_version)" != $RBX_VERSION ] ; then 
+          sub_task "old version detected, re-building"
+          install_rbx -f
+        else 
+          sub_task "version is up to date" 
+        fi
 
     else 
-      echo "-----> Installing rbx-head, with 1.9 support"
+      main_task "Installing rbx-head, with 1.9 support"
+        mkdir -p /tmp/rbx
 
-      mkdir -p /tmp/rbx
+        sub_task "Downloading Rubinius" 
+          download $RBX_URL/release-$RBX_VERSION | tar -zx$VERBOSE
+          mv rubinius-rubinius-* /tmp/rbx/rubinius
 
-      echo "Downloading Rubinius" | indent
-        download $RBX_URL/release-$RBX_VERSION | tar -zx$VERBOSE
-        mv rubinius-rubinius-* /tmp/rbx/rubinius
-
-      echo "Compiling" | indent
-        ./configure --prefix $CACHE/rbx --default-version=1.9
-        rake install 
-        echo $RBX_VERSION > $CACHE/rbx_version
+        sub_task "Compiling" 
+          ./configure --prefix $CACHE/rbx --default-version=1.9
+          rake install 
+          echo $RBX_VERSION > $CACHE/rbx_version
       
     fi 
     
@@ -51,23 +58,23 @@ install_rbx() {
 }
 
 install_base_gems() {
-  echo "Installing bundler"
-  rbx -S gem install bundler
+  main_task "Installing Necessary Gems"
+    sub_task "Installing bundler"
+      rbx -S gem install bundler
 
-  echo "Installing foreman"
-  rbx -S gem install foreman
-  return 2
+    sub_task "Installing foreman"
+      rbx -S gem install foreman
 }
 
 init_environment() {
-  echo "-----> Initializing Basic Environment" 
-  mkdir -p $BUILD 
-  mkdir -p $CACHE
+  main_task "Initializing Basic Environment" 
+    mkdir -p $BUILD 
+    mkdir -p $CACHE
 
-  mkdir -p $CACHE/gems/{bin,install}
-  gem install -q -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake 
+    mkdir -p $CACHE/gems/{bin,install}
+    gem install -q -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake &>/dev/null
 
-  touch $CACHE/rbx_version
+    touch $CACHE/rbx_version
 }
 
 
