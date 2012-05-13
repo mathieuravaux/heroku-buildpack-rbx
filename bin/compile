@@ -25,6 +25,9 @@ ensure_env() {
   export $PATH="$CACHE:$PATH"
 }
 
+clear_cache() {
+  rm -rf $CACHE/*
+}
 
 install_rbx() {
   local old_path=$PWD
@@ -33,6 +36,7 @@ install_rbx() {
 
         if [ "$(cat $CACHE/rbx_version)" != $RBX_VERSION ] ; then 
           sub_task "old version detected, re-building"
+          clear_cache
           install_rbx -f
         else 
           sub_task "version is up to date" 
@@ -48,7 +52,7 @@ install_rbx() {
 
         sub_task "Compiling" 
           cd /tmp/rbx/rubinius
-          ./configure --prefix $CACHE/rbx --default-version=1.9
+          ./configure --prefix $CACHE/rbx --default-version 1.9
           rake install 
 
         sub_task "Running Post-install Tasks"
