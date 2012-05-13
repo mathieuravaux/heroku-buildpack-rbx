@@ -67,7 +67,7 @@ install_rbx() {
 }
 
 rbx_compile() {
-  ruby configure --prefix $CACHE/rbx --default-version 1.9
+  ruby configure --prefix $CACHE --default-version 1.9
   rake install 
 } &>/dev/null
 
@@ -111,7 +111,7 @@ rbx_compile() {
 
   set -e
 
-  #set -x
+  set -x
 
   VERBOSE=
   RBX_URL=https://github.com/rubinius/rubinius/tarball
