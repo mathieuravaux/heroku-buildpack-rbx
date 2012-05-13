@@ -34,6 +34,11 @@ check_version() {
   [ "$(cat $CACHE/rbx_version)" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
 }
 
+write_version() {
+  echo "$RBX_VERSION+$BUILDPACK_VERSION" 
+  echo "$RBX_VERSION+$BUILDPACK_VERSION" > $CACHE/rbx_version
+}
+
 install_rbx() {
   local old_path=$PWD
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
@@ -63,7 +68,7 @@ install_rbx() {
           
 
         sub_task "Running Post-install Tasks"
-          echo "$RBX_VERSION+$BUILDPACK_VERSION" > $CACHE/rbx_version
+          write_version
     fi 
     
   cd $old_path
