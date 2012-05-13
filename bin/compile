@@ -83,7 +83,7 @@ init_environment() {
     mkdir -p $CACHE/gems/{bin,install}
     gem install -q -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake &>/dev/null
 
-    export PATH="$CACHE/rubinius$PATH"
+    export PATH="$CACHE/rubinius/bin:$PATH"
 }
 
 
