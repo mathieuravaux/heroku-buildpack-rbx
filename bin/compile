@@ -40,17 +40,20 @@ write_version() {
 }
 
 install_rbx() {
+  cat $CACH/rbx_version
+  return 1
+
   local old_path=$PWD
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
-      main_task "rbx install detected, checking version..." 
+      main_task "Rubinius install detected, checking version..." 
 
         
         if check_version ; then
-          sub_task "old version detected, re-building"
-          clear_cache
-          install_rbx -f
+          sub_task "Old version detected, re-building"
+            clear_cache
+            install_rbx -f
         else 
-          sub_task "version is up to date" 
+          sub_task "Version is up to date" 
         fi
 
     else 
