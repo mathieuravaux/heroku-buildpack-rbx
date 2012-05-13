@@ -96,6 +96,7 @@ init_environment() {
 
 bootstrap() {
   init_environment
+  ls $CACHE
   install_rbx
   install_base_gems
 }
@@ -121,8 +122,6 @@ BUILD=$1
 CACHE=$2
 
 
-
-ls $CACHE
 bootstrap
 install_gems
 exit 1
