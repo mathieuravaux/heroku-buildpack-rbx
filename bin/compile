@@ -107,7 +107,7 @@ set -e
 #set -x
 
 VERBOSE=
-RBX_URL=https://github.com/rubinius/rubinius
+RBX_URL=https://github.com/rubinius/rubinius/tarball
 RBX_VERSION="master"
 BUILDPACK_VERSION="0.0.1"
 BUILD=$1
