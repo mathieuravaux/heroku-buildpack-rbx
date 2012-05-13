@@ -40,7 +40,7 @@ write_version() {
 }
 
 install_rbx() {
-  cat $CACH/rbx_version
+  cat $CACHE/rbx_version
   return 1
 
   local old_path=$PWD
