@@ -29,12 +29,18 @@ clear_cache() {
   rm -rf $CACHE/*
 }
 
+check_version() {
+  cat $CACHE/rbx_version
+  [ "$(cat $CACHE/rbx_version)" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
+}
+
 install_rbx() {
   local old_path=$PWD
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
       main_task "rbx install detected, checking version..." 
 
-        if [ "$(cat $CACHE/rbx_version)" != "$RBX_VERSION+$BUILDPACK_VERSION" ] ; then 
+        
+        if check_version ; then
           sub_task "old version detected, re-building"
           clear_cache
           install_rbx -f
