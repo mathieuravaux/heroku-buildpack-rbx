@@ -14,8 +14,9 @@ main_task() {
 }
 
 sub_task() {
-  echo $@
-} | indent
+  echo $@ | indent
+} 
+
 
 ensure_env() {
   echo "Ensuring suitable environment"
