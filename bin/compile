@@ -58,7 +58,7 @@ install_rbx() {
 
         sub_task "Compiling" 
           cd /tmp/rbx/rubinius
-          #rbx_compile
+          rbx_compile
     fi 
     
   cd $old_path
@@ -96,9 +96,19 @@ init_environment() {
 
 bootstrap() {
   init_environment
+  echo "------------- ls"
   ls $CACHE
+  echo "----------------"
+
   install_rbx
+  echo "------------- ls"
+  ls $CACHE
+  echo "----------------"
+
   install_base_gems
+  echo "------------- ls"
+  ls $CACHE
+  echo "----------------"
 }
 
 install_gems() {
