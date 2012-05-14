@@ -69,10 +69,10 @@ rbx_compile() {
 install_base_gems() {
   main_task "Installing Necessary Gems"
     sub_task "Installing bundler"
-      rbx -S gem install bundler
+      ruby -S gem install bundler
 
     sub_task "Installing foreman"
-      rbx -S gem install foreman
+      ruby -S gem install foreman
 }
 
 init_environment() {
@@ -128,6 +128,3 @@ CACHE=$2
 bootstrap
 install_gems
 exit 1
-foreman start
-
-
