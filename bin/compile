@@ -59,6 +59,7 @@ rbx_compile() {
 install_base_gems() {
   echo "----"
   echo $PATH
+  ls $RBX_PREFIX/rubinius/bin
   which ruby
   echo "----"
 
@@ -83,7 +84,7 @@ init_environment() {
 
     install_gem rake
 
-    export PATH="$RBX_PREFIX/rubinius/bin:$PATH"
+    export PATH="$RBX_PREFIX/rubinius/bin$PATH"
 }
 
 install_gems() {
