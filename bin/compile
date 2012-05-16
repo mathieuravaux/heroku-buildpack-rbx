@@ -58,6 +58,7 @@ rbx_compile() {
 
 install_base_gems() {
   echo "----"
+  echo $PATH
   which ruby
   echo "----"
 
