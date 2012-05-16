@@ -15,6 +15,7 @@ sub_task() {
   echo $@ | indent
 } 
 
+
 check_version() {
   [ "$BUILDPACK_VERSION" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
 }
@@ -56,6 +57,10 @@ rbx_compile() {
 } &>/dev/null
 
 install_base_gems() {
+  echo "----"
+  which ruby
+  echo "----"
+
   main_task "Installing Necessary Gems"
     sub_task "Installing bundler"
       ruby -S gem install bundler
