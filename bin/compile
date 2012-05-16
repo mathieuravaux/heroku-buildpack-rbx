@@ -1,32 +1,22 @@
 #!/usr/bin/env bash
 
+#Helpers
 indent() {
   sed -u 's/^/       /'
 }
-
 download() {
   curl -L -s -S $@
 }
-
 main_task() {
   echo -n "-----> "
   echo $@
 }
-
 sub_task() {
   echo $@ | indent
 } 
 
-
-ensure_env() {
-  echo "Ensuring suitable environment"
-  mkdir -p $CACHE
-  mkdir -p $BUILD
-  export $PATH="$CACHE:$PATH"
-}
-
 check_version() {
-  [ "$CURRENT_VERSION" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
+  [ "$BUILDPACK_VERSION" != "$RBX_VERSION+$BUILDPACK_VERSION" ] 
 }
 
 
@@ -35,7 +25,6 @@ install_rbx() {
     if ! which rbx &>/dev/null && [ "$1" != "-f" ] ; then
       main_task "Rubinius install detected, checking version..." 
 
-        
         if check_version ; then
           sub_task "Old version detected, re-building"
             install_rbx -f
@@ -45,14 +34,13 @@ install_rbx() {
 
     else 
       main_task "Installing Rubinius"
-        mkdir -p /tmp/rbx
+        mkdir -p $COMPILE_DIR
 
         sub_task "Downloading" 
           download $RBX_URL/$RBX_VERSION | tar -zx$VERBOSE
-          mv rubinius-rubinius-* /tmp/rbx/rubinius
+          mv rubinius-rubinius-* $COMPILE_DIR/rubinius
 
         sub_task "Compiling" 
-          cd /tmp/rbx/rubinius
           rbx_compile
     fi 
     
@@ -62,7 +50,8 @@ install_rbx() {
 }
 
 rbx_compile() {
-  ruby configure --prefix $CACHE --default-version 1.9
+  cd $COMPILE_DIR/rubinius
+  ruby configure --prefix $RBX_PREFIX --default-version 1.9
   rake install 
 } &>/dev/null
 
@@ -75,33 +64,20 @@ install_base_gems() {
       ruby -S gem install foreman
 }
 
+install_gem() {
+  gem install -q -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri $1
+} &>/dev/null
+
 init_environment() {
   main_task "Initializing Basic Environment" 
     mkdir -p $BUILD 
+
     mkdir -p $CACHE
-
     mkdir -p $CACHE/gems/{bin,install}
-    gem install -q -n $CACHE/gems/bin -i $CACHE/gems/install --no-rdoc --no-ri rake &>/dev/null
 
-    export PATH="$CACHE/rubinius/bin:$PATH"
-}
+    install_gem rake
 
-
-bootstrap() {
-  init_environment
-  echo "------------- ls"
-  ls $CACHE
-  echo "----------------"
-
-  install_rbx
-  echo "------------- ls"
-  ls $CACHE
-  echo "----------------"
-
-  install_base_gems
-  echo "------------- ls"
-  ls $CACHE
-  echo "----------------"
+    export PATH="$RBX_PREFIX/rubinius/bin:$PATH"
 }
 
 install_gems() {
@@ -112,19 +88,27 @@ install_gems() {
   fi
 }
 
+bootstrap() {
+  init_environment
+  install_rbx
+  install_base_gems
+  install_gems
+}
 
 set -e
 
 #set -x
 
+#Initialize Environment
 VERBOSE=
 RBX_URL=https://github.com/rubinius/rubinius/tarball
 RBX_VERSION="master"
 BUILDPACK_VERSION="0.0.1"
 BUILD=$1
 CACHE=$2
+RBX_PREFIX=$CACHE
+COMPILE_DIR=/tmp/rbx
 
-
+#run
 bootstrap
-install_gems
 exit 1
